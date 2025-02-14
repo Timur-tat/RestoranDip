@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+#  app:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8080:8080"  # Port for your application
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/restoran # PostgreSQL connection URL
+#      SPRING_DATASOURCE_USERNAME: postgres  # Default PostgreSQL username
+#      SPRING_DATASOURCE_PASSWORD: 123456  # Password for PostgreSQL
+#      SPRING_JPA_HIBERNATE_DDL_AUTO: update  # Hibernate settings
+#    depends_on:
+#      - db  # Wait for the db service to be ready
+#    networks:
+#      - my_network  # Connect to the custom network
+
+  db:
+    image: postgres:14  # Use the official PostgreSQL image
+    restart: always
+    ports:
+      - "5432:5432"  # Port for PostgreSQL
+    environment:
+      POSTGRES_USER: restoran  # Set the default username
+      POSTGRES_PASSWORD: 123456  # Set the password for the user
+      POSTGRES_DB: restoran  # Create a database named 'restoran'
+    volumes:
+      - db_data:/var/lib/postgresql/data  # Persistent storage for PostgreSQL data
+    networks:
+      - my_network  # Connect to the custom network
+
+volumes:
+  db_data:  # Define a volume for persistent data
+
+networks:
+  my_network:  # Define a custom network
