@@ -1,11 +1,9 @@
 package com.diplom.restoran.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 @Builder
@@ -22,8 +20,17 @@ public class Chef {
 
     @Schema(description = "Имя повара", example = "Анна Сидорова")
     private String name;
-
-    @OneToMany
+    @JsonIgnoreProperties("chef")
+    @OneToMany(mappedBy = "chef")
+    @ToString.Exclude
     @Schema(description = "Заказы, переданные повару на приготовление")
     private List<CustomerOrder> orders;
+    public Chef addToOrders(CustomerOrder order) {
+        this.orders.add(order);
+        return this;
+    }
+    public Chef removeFromOrders(CustomerOrder order) {
+        this.orders.remove(order);
+        return this;
+    }
 }

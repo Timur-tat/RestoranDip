@@ -1,9 +1,11 @@
 package com.diplom.restoran.exeption;
 
+import org.springdoc.api.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
@@ -40,9 +42,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleNotFoundException(RuntimeException ex) {
         return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorMessage handleNotFoundException(NotFoundException ex) {
+        return new ErrorMessage(ex.getMessage());
+    }
+}//нписать сервисы и контроллеры
 
 //    @ExceptionHandler(Exception.class)
 //    public ResponseEntity<Map<String, Object>> handleGeneralException(Exception ex) {
 //        return buildErrorResponse("Внутренняя ошибка сервера", HttpStatus.INTERNAL_SERVER_ERROR);
 //    }
-}

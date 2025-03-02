@@ -1,11 +1,9 @@
 package com.diplom.restoran.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 @Builder
@@ -18,13 +16,23 @@ public class Waiter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(description = "Уникальный идентификатор официанта", example = "3")
-
     private Long id;
 
     @Schema(description = "Имя официанта", example = "Иван Петров")
     private String name;
-
-    @OneToMany
+    @JsonIgnoreProperties("waiter")
+    @OneToMany(mappedBy = "waiter")
+    @ToString.Exclude
     @Schema(description = "Список заказов, оформленных официантом")
+
     private List<CustomerOrder> orders;
+    public Waiter addToOrders(CustomerOrder order) {
+        this.orders.add(order);
+        return this;
+
+    }
+    public Waiter removeFromOrders(CustomerOrder order) {
+        this.orders.remove(order);
+        return this;
+    }
 }

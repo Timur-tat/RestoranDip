@@ -1,10 +1,9 @@
 package com.diplom.restoran.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +11,9 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 @Builder
 @Entity
 @Data
@@ -29,13 +31,21 @@ public class Dish {
     private String name;
 
     @NotNull(message = "Цена обязательна")
-    @DecimalMin(value = "0.1", message = "Цена блюда должна быть больше 0")
+    @DecimalMin(value = "0.0", message = "Цена блюда должна быть больше 0")
     @Schema(description = "Цена", example = "1000")
-    private BigDecimal price;
+    private Double price;
 
     @Size(max = 255, message = "Описание не должно превышать 255 символов")
     private String description;
 
     @NotNull(message = "Поле доступности обязательно")
-    private Boolean available;
+    private Boolean available=false;
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "orders_dishes",
+            joinColumns = @JoinColumn(name = "dishes_id"),
+            inverseJoinColumns = @JoinColumn(name = "customerOrderId")
+    )
+    private List<CustomerOrder> customerOrders = new ArrayList<>();
 }

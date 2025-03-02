@@ -1,11 +1,9 @@
 package com.diplom.restoran.entity;
 
+import com.diplom.restoran.security.models.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 @Builder
@@ -23,8 +21,19 @@ public class Customer {
 
     @Schema(description = "Имя клиента", example = "Александр Смирнов")
     private String name;
-
-    @OneToMany
+@ToString.Exclude
+    @OneToMany(mappedBy = "customer")
     @Schema(description = "Список заказов клиента")
     private List<CustomerOrder> orders;
+    public Customer addToOrders(CustomerOrder order) {
+        this.orders.add(order);
+        return this;
+    }
+    public Customer removeFromOrders(CustomerOrder order) {
+        this.orders.remove(order);
+        return this;
+    }
+    @OneToOne(cascade =CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

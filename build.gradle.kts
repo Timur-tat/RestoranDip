@@ -24,8 +24,11 @@ repositories {
 }
 
 dependencies {
-
-
+    implementation ("org.springframework.boot:spring-boot-starter-security:3.4.2")
+    implementation ("org.springframework.boot:spring-boot-starter-validation:3.1.0")
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
     implementation ("org.postgresql:postgresql:42.7.5")
     implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4")
     implementation ("org.springframework.boot:spring-boot-starter-validation:3.4.2")

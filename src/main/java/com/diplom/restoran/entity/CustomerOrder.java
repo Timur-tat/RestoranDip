@@ -1,12 +1,10 @@
 package com.diplom.restoran.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Cascade;
 
 import java.util.ArrayList;
@@ -15,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "orderss")
+@Entity(name = "orders")
 @Tag(name = "Orders", description = "Управление заказами в ресторане")
 @Schema(description = "Сущность заказа в ресторане")
 public class CustomerOrder {
@@ -24,25 +22,39 @@ public class CustomerOrder {
     @Schema(description = "Уникальный идентификатор заказа", example = "1")
     private Long id;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @Schema(description = "повар который готовил заказ")
+    private Chef chef;
+
     @Schema(description = "Статус заказа", example = "Готово")
     private String status;
 
     @ManyToOne(cascade = CascadeType.ALL)
-
+    @JsonIgnoreProperties("orders")
     @Schema(description = "Клиент, сделавший заказ")
     private Customer customer;
 
+    @JsonIgnoreProperties("orders")
     @ManyToOne(cascade = CascadeType.ALL)
+    @ToString.Exclude
     @Schema(description = "Официант, принявший заказ")
     private Waiter waiter;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @Schema(description = "Список блюд в заказе")
-    private List<Dish> dishes= new ArrayList<>();
+    @ManyToMany
+    @JoinTable(
+            name = "orders_dishes",
+            joinColumns = @JoinColumn(name = "customerOrderId"),
+            inverseJoinColumns = @JoinColumn(name = "dishes_id")
+    )
+
+    private List<Dish> dishes = new ArrayList<>();
 
     @Schema(description = "Общая сумма заказа", example = "1250.50")
     private Double totalAmount;
+    public void setAllPriceTotalAmount() {
+        this.totalAmount = this.dishes.stream() .mapToDouble(Dish::getPrice).sum();
+    }
 
     @Schema(description = "Оплачен ли заказ", example = "false")
-    private Boolean paid;
-}
+    private Boolean paid = false; //в сервисе и контролере тру на фолс
+}//сделать cписок где paid= false

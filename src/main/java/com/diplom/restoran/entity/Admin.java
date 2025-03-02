@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 @Builder
 @Data
@@ -25,17 +26,15 @@ public class Admin {
 
     @OneToMany
     @Schema(description = "Список официантов в подчинении")
-    private List<Waiter> waiters;
+    private List<Waiter> waiters= new ArrayList<>();//add remove
 
     @OneToMany
     @Schema(description = "Список поваров в подчинении")
-    private List<Chef> chefs;
+    private List<Chef> chefs= new ArrayList<>();//add remove
 
     @OneToMany
     @Schema(description = "Меню ресторана")
-    private List<Dish> menu;
+    private List<Dish> menu= new ArrayList<>();//add remove
 
-    @OneToMany
-    @Schema(description = "Список столиков в ресторане")
-    private List<Table> tables;
+
 }
