@@ -96,6 +96,7 @@ CustomerRepository customerRepository;
       strRoles.forEach(role -> {
         switch (role) {
         case "admin":
+          System.out.println("admin");
           Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
               .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
           roles.add(adminRole);
@@ -107,6 +108,18 @@ CustomerRepository customerRepository;
           roles.add(modRole);
 
           break;
+          case "chef":
+            Role chefRole = roleRepository.findByName(ERole.ROLE_CHEF)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(chefRole);
+
+            break;
+          case "waiter":
+            Role waiterRole = roleRepository.findByName(ERole.ROLE_WAITER)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(waiterRole);
+
+            break;
         default:
           Role userRole = roleRepository.findByName(ERole.ROLE_USER)
               .orElseThrow(() -> new RuntimeException("Error: Role is not found."));

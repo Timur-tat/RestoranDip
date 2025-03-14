@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/chef")
 @Tag(name = "Chef", description = "Управление поварами")
-@PreAuthorize("hasRole('MODERATOR')")
+@PreAuthorize("hasRole('CHEF')")
 public class ChefController {
     private final ChefService chefService;
     private final CustomerOrderRepository customerOrderRepository;

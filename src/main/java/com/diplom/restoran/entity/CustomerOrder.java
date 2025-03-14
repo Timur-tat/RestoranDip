@@ -56,5 +56,5 @@ public class CustomerOrder {
     }
 
     @Schema(description = "Оплачен ли заказ", example = "false")
-    private Boolean paid = false; //в сервисе и контролере тру на фолс
-}//сделать cписок где paid= false
+    private Boolean paid = false;
+}

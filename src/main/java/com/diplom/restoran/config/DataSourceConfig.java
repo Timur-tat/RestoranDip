@@ -22,6 +22,12 @@ public class DataSourceConfig {
     @Value("${spring.datasource.driver-class-name}")
     private String dbDriver;
 
+//    spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+//    spring.jpa.hibernate.ddl-auto=update
+//    spring.datasource.url=jdbc:postgresql://localhost:5432/restoran?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+//    spring.datasource.username=postgres
+//    spring.datasource.password=123456
+//    spring.datasource.driver-class-name=org.postgresql.Driver
 
 
     @Bean

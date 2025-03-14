@@ -4,9 +4,18 @@ import com.diplom.restoran.dto.CustomerOrderDTO;
 import com.diplom.restoran.entity.*;
 import com.diplom.restoran.exeption.NotFoundException;
 import com.diplom.restoran.repository.*;
+import com.diplom.restoran.security.models.User;
+import com.diplom.restoran.security.repository.UserRepository;
+import org.aspectj.weaver.ast.Not;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,18 +26,20 @@ import java.util.stream.StreamSupport;
 
 @Service
 public class CustomerOrderService {
+    private UserRepository userRepository;
     private final CustomerOrderRepository customerOrderRepository;
     private final CustomerRepository customerRepository;
     private DishRepository dishRepository;
     private ChefRepository chefRepository;
     private WaiterRepository waiterRepository;
     private Random random = new Random();
-    public CustomerOrderService(CustomerOrderRepository customerOrderRepository, DishRepository dishRepository, ChefRepository chefRepository, WaiterRepository waiterRepository, CustomerRepository customerRepository) {
+    public CustomerOrderService(CustomerOrderRepository customerOrderRepository, DishRepository dishRepository, ChefRepository chefRepository, WaiterRepository waiterRepository, CustomerRepository customerRepository, UserRepository userRepository) {
         this.customerOrderRepository = customerOrderRepository;
         this.dishRepository= dishRepository;
         this.chefRepository= chefRepository;
         this.waiterRepository= waiterRepository;
         this.customerRepository= customerRepository;
+        this.userRepository  = userRepository;
 
         ;
     }
@@ -127,6 +138,17 @@ public CustomerOrder saveCustomerOrder(CustomerOrderDTO customerOrderDTO) throws
     CustomerOrder savedOrder = customerOrderRepository.save(newOrder);
     return savedOrder;
 }
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public CustomerOrder saveCustomerOrder1(CustomerOrderDTO customerOrderDTO) throws NotFoundException {
+        Customer customer = getCurrentCustomer();
+        List<Dish> dishes = customerOrderDTO.getDishIds().stream()
+                .map(dish -> dishRepository.findById(dish)
+                        .orElseThrow(() -> new NotFoundException("Dish not found")))
+                .toList();
+        CustomerOrder newOrder = new CustomerOrder(null, null, customerOrderDTO.getStatus(),customer, null, dishes, 0.0, false);
+        CustomerOrder savedOrder = customerOrderRepository.save(newOrder);
+        return savedOrder;
+    }
     public void addDishToOrder(Long orderId, Long dishId) {
         CustomerOrder order = customerOrderRepository.findById(orderId)
                 .orElseThrow(() -> new NotFoundException("Order not found"));
@@ -163,5 +185,30 @@ public CustomerOrder saveCustomerOrder(CustomerOrderDTO customerOrderDTO) throws
             throw new NotFoundException("CustomerOrder not found with id: " + id);
         }
         customerOrderRepository.deleteById(id);
+    }
+
+    public Customer getCurrentCustomer() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new NotFoundException("NOT authenticated");
+        }
+
+        Object principal = authentication.getPrincipal();
+        String username;
+
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+
+        Customer customer = customerRepository.findByUser(user)
+                .orElseThrow(() -> new RuntimeException("Связанный Customer не найден"));
+
+        return customer;
     }
 }

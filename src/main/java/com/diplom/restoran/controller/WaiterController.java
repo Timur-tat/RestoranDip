@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/waiter")
 @Tag(name = "Waiter", description = "Управление официантами")
-@PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+@PreAuthorize("hasRole('WAITER') or hasRole('ADMIN')")
 public class WaiterController {
     private final WaiterService waiterService;
 

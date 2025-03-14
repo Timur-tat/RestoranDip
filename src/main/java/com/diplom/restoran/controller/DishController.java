@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/dishes")
 @Tag(name = "Dishes", description = "Управления блюдами")
-@PreAuthorize(" hasRole('MODERATOR') or hasRole('ADMIN')")
+@PreAuthorize(" hasRole('CHEF') or hasRole('ADMIN')")
  class DishController {
     private final DishRepository dishRepository;
     private final DishService dishService;

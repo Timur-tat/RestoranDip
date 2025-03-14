@@ -69,7 +69,7 @@ private ChefRepository chefRepository;
     @PostMapping("/DTO/1")
     @Operation(summary = "Создать новый CustomerOrder.", description = "saveCustomerOrder1")
     public CustomerOrder saveCustomerOrder1(@RequestBody CustomerOrderDTO customerOrderDTO) {
-return customerOrderService.saveCustomerOrder(customerOrderDTO);
+return customerOrderService.saveCustomerOrder1(customerOrderDTO);
 
     }
     @PostMapping("/DTO")
