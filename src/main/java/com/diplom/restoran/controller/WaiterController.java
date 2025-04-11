@@ -3,6 +3,7 @@ package com.diplom.restoran.controller;
 import com.diplom.restoran.dto.WaiterDTO;
 import com.diplom.restoran.entity.CustomerOrder;
 import com.diplom.restoran.entity.Waiter;
+import com.diplom.restoran.service.CurrentUserSecurity;
 import com.diplom.restoran.service.CustomerOrderService;
 import com.diplom.restoran.service.WaiterService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,16 +12,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.spi.CurrencyNameProvider;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/waiter")
 @Tag(name = "Waiter", description = "Управление официантами")
 @PreAuthorize("hasRole('WAITER') or hasRole('ADMIN')")
-public class WaiterController {
+public class WaiterController  extends CurrentUserSecurity {
     private final WaiterService waiterService;
 
     private final CustomerOrderService customerOrderService;
@@ -37,7 +41,9 @@ public class WaiterController {
                     content = @Content)
     })
     @GetMapping
-    public List<WaiterDTO> getWaiters() {return waiterService.getAllWaiters();}
+    public List<WaiterDTO> getWaiters() {
+       // log.info("Запрос на получение всех блюд {}",  getCurrentUsername());
+        return waiterService.getAllWaiters();}
     @Operation(summary = "Добавить нового Waiter", description = "Добавляет нового официанта в систему.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Официант успешно добавлен"),
@@ -64,6 +70,7 @@ public Waiter removeCustomerOrderFromWaiter(@PathVariable Long waiterId, @PathVa
     }
 @GetMapping("/addToCustomerOrder/{waiterId}/{customerOrderId}")
     public Waiter addToCustomerOrder(@PathVariable Long waiterId, @PathVariable Long customerOrderId) {
+    //log.info("добавление waiter в customerOrder{}",waiterId,customerOrderId, getCurrentUsername());
         Waiter waiter =waiterService.getWaiterById(waiterId);
     CustomerOrder customerOrder= customerOrderService.getCustomerOrderById(customerOrderId);
    customerOrder.setWaiter(waiter);

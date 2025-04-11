@@ -17,6 +17,7 @@ import com.diplom.restoran.security.services.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,7 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+@Slf4j
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
@@ -55,7 +56,7 @@ CustomerRepository customerRepository;
   @PostMapping("/signin")
   @Operation(summary = "Вход в систему", description = "Аутентификация пользователя и получение JWT токена")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
+log.info("Вход в систему {}", loginRequest.getUsername());
     Authentication authentication = authenticationManager
         .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -65,7 +66,7 @@ CustomerRepository customerRepository;
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
     List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
         .collect(Collectors.toList());
-
+log.info("Вход в систему {} {}", userDetails.getUsername(), userDetails.getAuthorities());
     return ResponseEntity
         .ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
   }
@@ -73,11 +74,14 @@ CustomerRepository customerRepository;
   @PostMapping("/signup")
   @Operation(summary = "Регистрация пользователя", description = "Создание нового аккаунта")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+      log.error("Username {} already token", signUpRequest.getUsername());
       return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
     }
 
     if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+      log.error("Email {} already token", signUpRequest.getEmail());
       return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
     }
 
@@ -133,6 +137,7 @@ CustomerRepository customerRepository;
     Customer customer = new Customer();
     customer.setUser(user);
 customerRepository.save(customer);
+log.info("user {} registered successfully",user.getUsername());
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
 }

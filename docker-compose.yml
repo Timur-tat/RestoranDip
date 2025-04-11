@@ -1,21 +1,21 @@
 version: '3.8'
 
 services:
-#  app:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    ports:
-#      - "8080:8080"  # Port for your application
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/restoran # PostgreSQL connection URL
-#      SPRING_DATASOURCE_USERNAME: postgres  # Default PostgreSQL username
-#      SPRING_DATASOURCE_PASSWORD: 123456  # Password for PostgreSQL
-#      SPRING_JPA_HIBERNATE_DDL_AUTO: update  # Hibernate settings
-#    depends_on:
-#      - db  # Wait for the db service to be ready
-#    networks:
-#      - my_network  # Connect to the custom network
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"  # Port for your application
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/restoran # PostgreSQL connection URL
+      SPRING_DATASOURCE_USERNAME: postgres  # Default PostgreSQL username
+      SPRING_DATASOURCE_PASSWORD: 123456  # Password for PostgreSQL
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update  # Hibernate settings
+    depends_on:
+      - db  # Wait for the db service to be ready
+    networks:
+      - my_network  # Connect to the custom network
 
   db:
     image: postgres:14  # Use the official PostgreSQL image

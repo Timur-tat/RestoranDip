@@ -1,0 +1,48 @@
+2025-03-27 18:31:36 DEBUG o.j.logging:164 - Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property
+2025-03-27 18:31:36 INFO  c.d.r.c.ChefControllerTest:53 - Starting ChefControllerTest using Java 17.0.12 with PID 30232 (started by Тимур in E:\Restoran)
+2025-03-27 18:31:36 DEBUG c.d.r.c.ChefControllerTest:54 - Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-03-27 18:31:36 INFO  c.d.r.c.ChefControllerTest:652 - No active profile set, falling back to 1 default profile: "default"
+2025-03-27 19:11:15 DEBUG o.j.logging:164 - Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property
+2025-03-27 19:11:15 INFO  c.d.r.c.ChefControllerTest:53 - Starting ChefControllerTest using Java 17.0.12 with PID 22936 (started by Тимур in E:\Restoran)
+2025-03-27 19:11:15 DEBUG c.d.r.c.ChefControllerTest:54 - Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-03-27 19:11:15 INFO  c.d.r.c.ChefControllerTest:652 - No active profile set, falling back to 1 default profile: "default"
+2025-03-27 19:12:06 DEBUG o.j.logging:164 - Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property
+2025-03-27 19:12:06 INFO  c.d.r.c.ChefControllerTest:53 - Starting ChefControllerTest using Java 17.0.12 with PID 29096 (started by Тимур in E:\Restoran)
+2025-03-27 19:12:06 DEBUG c.d.r.c.ChefControllerTest:54 - Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-03-27 19:12:06 INFO  c.d.r.c.ChefControllerTest:652 - No active profile set, falling back to 1 default profile: "default"
+2025-03-27 19:13:55 DEBUG o.j.logging:164 - Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property
+2025-03-27 19:13:55 INFO  c.d.r.c.ChefControllerTest:53 - Starting ChefControllerTest using Java 17.0.12 with PID 23180 (started by Тимур in E:\Restoran)
+2025-03-27 19:13:55 DEBUG c.d.r.c.ChefControllerTest:54 - Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-03-27 19:13:55 INFO  c.d.r.c.ChefControllerTest:652 - No active profile set, falling back to 1 default profile: "default"
+2025-03-27 19:20:04 DEBUG o.j.logging:164 - Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property
+2025-03-27 19:20:04 INFO  c.d.r.c.ChefControllerTest:53 - Starting ChefControllerTest using Java 17.0.12 with PID 22372 (started by Тимур in E:\Restoran)
+2025-03-27 19:20:04 DEBUG c.d.r.c.ChefControllerTest:54 - Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-03-27 19:20:04 INFO  c.d.r.c.ChefControllerTest:652 - No active profile set, falling back to 1 default profile: "default"
+2025-03-27 19:21:41 DEBUG o.j.logging:164 - Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property
+2025-03-27 19:21:41 INFO  c.d.r.c.ChefControllerTest:53 - Starting ChefControllerTest using Java 17.0.12 with PID 10556 (started by Тимур in E:\Restoran)
+2025-03-27 19:21:41 DEBUG c.d.r.c.ChefControllerTest:54 - Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-03-27 19:21:41 INFO  c.d.r.c.ChefControllerTest:652 - No active profile set, falling back to 1 default profile: "default"
+2025-03-27 19:26:07 DEBUG o.j.logging:164 - Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property
+2025-03-27 19:26:07 INFO  c.d.r.c.ChefControllerTest:53 - Starting ChefControllerTest using Java 17.0.12 with PID 14376 (started by Тимур in E:\Restoran)
+2025-03-27 19:26:07 DEBUG c.d.r.c.ChefControllerTest:54 - Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-03-27 19:26:07 INFO  c.d.r.c.ChefControllerTest:652 - No active profile set, falling back to 1 default profile: "default"
+2025-03-27 19:29:14 DEBUG o.j.logging:164 - Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property
+2025-03-27 19:29:14 INFO  c.d.r.c.ChefControllerTest:53 - Starting ChefControllerTest using Java 17.0.12 with PID 18752 (started by Тимур in E:\Restoran)
+2025-03-27 19:29:14 DEBUG c.d.r.c.ChefControllerTest:54 - Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-03-27 19:29:14 INFO  c.d.r.c.ChefControllerTest:652 - No active profile set, falling back to 1 default profile: "default"
+2025-03-27 19:33:35 DEBUG o.j.logging:164 - Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property
+2025-03-27 19:33:35 INFO  c.d.r.c.ChefControllerTest:53 - Starting ChefControllerTest using Java 17.0.12 with PID 13144 (started by Тимур in E:\Restoran)
+2025-03-27 19:33:35 DEBUG c.d.r.c.ChefControllerTest:54 - Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-03-27 19:33:35 INFO  c.d.r.c.ChefControllerTest:652 - No active profile set, falling back to 1 default profile: "default"
+2025-03-27 19:36:32 DEBUG o.j.logging:164 - Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property
+2025-03-27 19:36:32 INFO  c.d.r.c.ChefControllerTest:53 - Starting ChefControllerTest using Java 17.0.12 with PID 1088 (started by Тимур in E:\Restoran)
+2025-03-27 19:36:32 DEBUG c.d.r.c.ChefControllerTest:54 - Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-03-27 19:36:32 INFO  c.d.r.c.ChefControllerTest:652 - No active profile set, falling back to 1 default profile: "default"
+2025-03-27 19:39:38 DEBUG o.j.logging:164 - Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property
+2025-03-27 19:39:38 INFO  c.d.r.c.ChefControllerTest:53 - Starting ChefControllerTest using Java 17.0.12 with PID 14056 (started by Тимур in E:\Restoran)
+2025-03-27 19:39:38 DEBUG c.d.r.c.ChefControllerTest:54 - Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-03-27 19:39:38 INFO  c.d.r.c.ChefControllerTest:652 - No active profile set, falling back to 1 default profile: "default"
+2025-03-27 19:41:06 DEBUG o.j.logging:164 - Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property
+2025-03-27 19:41:06 INFO  c.d.r.c.ChefControllerTest:53 - Starting ChefControllerTest using Java 17.0.12 with PID 21096 (started by Тимур in E:\Restoran)
+2025-03-27 19:41:06 DEBUG c.d.r.c.ChefControllerTest:54 - Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-03-27 19:41:06 INFO  c.d.r.c.ChefControllerTest:652 - No active profile set, falling back to 1 default profile: "default"

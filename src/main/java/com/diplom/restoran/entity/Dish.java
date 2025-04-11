@@ -47,5 +47,6 @@ public class Dish {
             joinColumns = @JoinColumn(name = "dishes_id"),
             inverseJoinColumns = @JoinColumn(name = "customerOrderId")
     )
+    @ToString.Exclude
     private List<CustomerOrder> customerOrders = new ArrayList<>();
 }

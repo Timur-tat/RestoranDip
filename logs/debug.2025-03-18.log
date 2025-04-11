@@ -1,0 +1,76 @@
+2025-03-18 18:26:36 DEBUG o.j.logging:164 - Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property
+2025-03-18 18:26:36 INFO  c.d.r.RestoranApplication:53 - Starting RestoranApplication using Java 17.0.12 with PID 12048 (E:\Restoran\build\classes\java\main started by Тимур in E:\Restoran)
+2025-03-18 18:26:36 DEBUG c.d.r.RestoranApplication:54 - Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-03-18 18:26:36 INFO  c.d.r.RestoranApplication:652 - No active profile set, falling back to 1 default profile: "default"
+2025-03-18 18:26:41 DEBUG c.d.r.s.j.AuthTokenFilter:240 - Filter 'authenticationJwtTokenFilter' configured for use
+2025-03-18 18:26:41 DEBUG _.s.w.s.H.Mappings:294 - 
+	c.d.r.c.AdminController:
+	{GET [/api/admins/{id}]}: findById(long)
+	{GET [/api/admins]}: getAllAdmins()
+	{POST [/api/admins]}: saveAdmin(AdminDTO)
+	{GET [/api/admins/chefs/{adminId}]}: saveChefToAdmin(List,Long)
+	{GET [/api/admins/waiters/{adminId}]}: saveWaitersToAdmin(List,Long)
+2025-03-18 18:26:41 DEBUG _.s.w.s.H.Mappings:294 - 
+	c.d.r.c.ChefController:
+	{POST [/api/chef]}: saveChef(ChefDTO)
+	{GET [/api/chef/{id}]}: findChefById(Long)
+	{GET [/api/chef]}: findAllChefs()
+	{GET [/api/chef/{customerOrderId}/{chefId}]}: saveCustomerOrderToChef(Long,Long)
+	{GET [/api/chef/waitersIsNull]}: getOrdersWithNullWaiter(Long)
+	{GET [/api/chef/chefsIsNull]}: getOrdersWithNullChef(Long)
+	{GET [/api/chef/waitersAndChefsNull]}: getOrdersWithNullWaiterAndChef(Long)
+2025-03-18 18:26:41 DEBUG _.s.w.s.H.Mappings:294 - 
+	c.d.r.c.CustomerController:
+	{GET [/api/customers]}: getCustomers()
+	{POST [/api/customers]}: saveCustomer(CustomerDTO)
+	{GET [/api/customers/me]}: getCurrentCustomer()
+	{DELETE [/api/customers/custmerorder/{customerId}/{customerOrderId}]}: removeCustomerOrderFromCustomer(Long,Long)
+	{GET [/api/customers/custmerorder/{orderId}/{customerOrderId}]}: saveCustomerOrderToCustomer(Long,Long)
+	{GET [/api/customers/getTotalAmount/{customerOrderId}]}: setAllPriceTotalAmount(Long)
+2025-03-18 18:26:41 DEBUG _.s.w.s.H.Mappings:294 - 
+	c.d.r.c.CustomerOrderController:
+	{POST [/api/customerOrders/DTO/1]}: saveCustomerOrder1(CustomerOrderDTO)
+	{POST [/api/customerOrders/DTO]}: saveCustomerOrder(CustomerOrderDTO)
+	{GET [/api/customerOrders/addChefToCustomerOrder{customerOrderId}/addWaiter/{chefId}]}: addChef(Long,Long)
+	{GET [/api/customerOrders/paidIsTrueId/{customerOrderId}]}: paidIsTrueId(Long)
+	{GET [/api/customerOrders/addWaiterToCustomerOrder{customerOrderId}/addWaiter/{waiterId}]}: addWaiter(Long,Long)
+	{GET [/api/customerOrders/totalAmountCustomerOrder]}: setAllPriceTotalAmount(Long)
+	{POST [/api/customerOrders]}: createCustomerOrder(CustomerOrder)
+	{GET [/api/customerOrders/customerOrderWithNullWaiter]}: customerOrderWithNullWaiter()
+	{GET [/api/customerOrders]}: getAllCustomerOrders()
+	{GET [/api/customerOrders/customerOrderWithNullChef]}: customerOrderWithNullChef()
+2025-03-18 18:26:41 DEBUG _.s.w.s.H.Mappings:294 - 
+	c.d.r.c.DishController:
+	{GET [/api/dishes]}: getAllDishes()
+	{POST [/api/dishes]}: saveDish(DishDTO)
+	{GET [/api/dishes/underPrice]}: getDishesUnderPrice(Double)
+	{GET [/api/dishes/{id}]}: findDishById(long)
+	{DELETE [/api/dishes/{id}]}: deleteDish(Long)
+2025-03-18 18:26:41 DEBUG _.s.w.s.H.Mappings:294 - 
+	c.d.r.c.WaiterController:
+	{DELETE [/api/waiter/custmerorder/{waiterId}/{customerOrderIds}]}: removeCustomerOrderFromWaiter(Long,Long)
+	{GET [/api/waiter/custmerorder/{waiterId}/{customerOrderIds}]}: saveCustomerOrderToWaiter(Long,Long)
+	{POST [/api/waiter]}: saveWaiter(WaiterDTO)
+	{GET [/api/waiter]}: getWaiters()
+	{GET [/api/waiter/addToCustomerOrder/{waiterId}/{customerOrderId}]}: addToCustomerOrder(Long,Long)
+2025-03-18 18:26:41 DEBUG _.s.w.s.H.Mappings:294 - 
+	c.d.r.s.c.AuthController:
+	{POST [/api/auth/signin]}: authenticateUser(LoginRequest)
+	{POST [/api/auth/signup]}: registerUser(SignupRequest)
+2025-03-18 18:26:41 DEBUG _.s.w.s.H.Mappings:294 - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	{ [/error]}: error(HttpServletRequest)
+	{ [/error], produces [text/html]}: errorHtml(HttpServletRequest,HttpServletResponse)
+2025-03-18 18:26:41 DEBUG _.s.w.s.H.Mappings:294 - 
+	o.s.w.a.OpenApiWebMvcResource:
+	{GET [/v3/api-docs], produces [application/json]}: openapiJson(HttpServletRequest,String,Locale)
+	{GET [/v3/api-docs.yaml], produces [application/vnd.oai.openapi]}: openapiYaml(HttpServletRequest,String,Locale)
+2025-03-18 18:26:41 DEBUG _.s.w.s.H.Mappings:294 - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	{GET [/swagger-ui.html]}: redirectToUi(HttpServletRequest)
+2025-03-18 18:26:41 DEBUG _.s.w.s.H.Mappings:294 - 
+	o.s.w.u.SwaggerConfigResource:
+	{GET [/v3/api-docs/swagger-config], produces [application/json]}: openapiJson(HttpServletRequest)
+2025-03-18 18:26:41 DEBUG _.s.w.s.H.Mappings:86 - 'beanNameHandlerMapping' {}
+2025-03-18 18:26:41 DEBUG _.s.w.s.H.Mappings:176 - 'resourceHandlerMapping' {/webjars/**=ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]], /**=ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]], /swagger-ui*/*swagger-initializer.js=ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]], /swagger-ui*/**=ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]]}
+2025-03-18 18:26:42 INFO  c.d.r.RestoranApplication:59 - Started RestoranApplication in 6.237 seconds (process running for 7.099)

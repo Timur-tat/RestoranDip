@@ -39,8 +39,16 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    //testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    //testImplementation ("org.springframework.boot:spring-boot-starter-test")
+    testImplementation ("org.junit.jupiter:junit-jupiter-api")
+    testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation ("org.mockito:mockito-junit-jupiter") // Для интеграции Mockito с JUnit5
+    implementation ("org.springframework.boot:spring-boot-starter-security")
+    testImplementation ("org.springframework.security:spring-security-test")
+    testImplementation ("org.assertj:assertj-core:3.24.2")
 }
+
 
 tasks.withType<Test> {
     useJUnitPlatform()

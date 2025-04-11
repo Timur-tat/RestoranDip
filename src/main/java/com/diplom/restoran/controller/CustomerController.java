@@ -7,11 +7,13 @@ import com.diplom.restoran.entity.CustomerOrder;
 import com.diplom.restoran.repository.CustomerRepository;
 import com.diplom.restoran.security.models.User;
 import com.diplom.restoran.security.repository.UserRepository;
+import com.diplom.restoran.service.CurrentUserSecurity;
 import com.diplom.restoran.service.CustomerOrderService;
 import com.diplom.restoran.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.GenerationType;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,12 +23,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/api/customers")
 @Tag(name = "Customer", description = "Управление клиентами")
 @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-public class CustomerController {
+public class CustomerController extends CurrentUserSecurity {
     private final CustomerService customerService;
     private CustomerRepository customerRepository;
     private final CustomerOrderService customerOrderService;
@@ -39,7 +41,8 @@ public class CustomerController {
     }
     @GetMapping
     @Operation(summary = "Список всех Customer.", description = "getCustomers")
-    public List<CustomerDTO> getCustomers() {return customerService.getAllCustomers();}
+    public List<CustomerDTO> getCustomers() {
+        log.info("Запрос на получение всех клиентов {}",  getCurrentUsername());return customerService.getAllCustomers();}
 
     @PostMapping
     @Operation(summary = "Создание нового Customer", description = "saveCustomer")
@@ -50,16 +53,19 @@ public class CustomerController {
     @DeleteMapping("/custmerorder/{customerId}/{customerOrderId}")
     @Operation(summary = "Удалить CustomerOrder из Customer по id", description = "removeCustomerOrderFromCustomer")
     public Customer removeCustomerOrderFromCustomer(@PathVariable Long customerId, @PathVariable Long customerOrderId) {
+        log.info("Запрос на удаление CustomerOrder из Customer по id {},{},{}",customerId,customerOrderId,  getCurrentUsername());
         return customerService.removeCustomerOrderFromCustomer(customerId, customerOrderId );
     }
     @GetMapping("/custmerorder/{orderId}/{customerOrderId}")
     @Operation(summary = "Добавить CustomerOrder по id в Customer ", description = "saveCustomerOrderToCustomer")
     public Customer saveCustomerOrderToCustomer(@PathVariable Long orderId, @PathVariable Long customerOrderId) {
+        log.info("Запрос на добавление заказа в клиента {},{},{}",orderId, customerOrderId,  getCurrentUsername());
         return customerService.saveCustomerOrderToCustomer(orderId, customerOrderId );
     }
     @GetMapping("/getTotalAmount/{customerOrderId}")
     @Operation(summary = "Подсчет TotalAmount для Customer по id", description = "setAllPriceTotalAmount")
     public Double setAllPriceTotalAmount(@PathVariable Long customerOrderId) {
+        log.info("Запрос на подсчет суммы для конкретного клиента {},{}",customerOrderId,  getCurrentUsername());
         return customerService.setAllPriceTotalAmount(customerOrderId);
     }
     @GetMapping("/me")

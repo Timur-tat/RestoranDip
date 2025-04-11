@@ -16,5 +16,4 @@ public class AdminDTO {
     private List<Long> waiterIds;
     private List<Long> chefIds;
     private List<Long> menuIds;
-
 }

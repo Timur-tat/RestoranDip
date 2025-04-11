@@ -4,6 +4,7 @@ import com.diplom.restoran.dto.AdminDTO;
 import com.diplom.restoran.entity.*;
 import com.diplom.restoran.exeption.NotFoundException;
 import com.diplom.restoran.repository.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
@@ -11,36 +12,54 @@ import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+@Slf4j
 @Service
+
    public class AdminService {
         private final AdminRepository adminRepository;
     private final WaiterRepository waiterRepository;
     private final ChefRepository chefRepository;
     private final DishRepository dishRepository;
-    private final TableRepository tableRepository;
 
 
-    public AdminService(AdminRepository adminRepository, WaiterRepository waiterRepository, ChefRepository chefRepository, DishRepository dishRepository, TableRepository tableRepository) {
+
+    public AdminService(AdminRepository adminRepository, WaiterRepository waiterRepository, ChefRepository chefRepository, DishRepository dishRepository) {
             this.adminRepository = adminRepository;
         this.waiterRepository = waiterRepository;
         this.chefRepository = chefRepository;
         this.dishRepository = dishRepository;
-        this.tableRepository = tableRepository;
+
     }
 
         public List<AdminDTO> getAllAdmins() {
+        log.info("getAllAdmins");
             return adminRepository.findAll().stream()
                     .map(admin -> new AdminDTO(admin.getId(), admin.getName(), null, null, null))
                     .collect(Collectors.toList());
         }
+    public List<Waiter> getWaitersByIds(AdminDTO adminDTO) {
+        return adminDTO.getWaiterIds().stream()
+                .map(id -> {
+                    log.debug("Поиск официанта с ID: {}", id); // Логируем ID
+                    Waiter waiter = waiterRepository.findById(id)
+                            .orElseThrow(() -> {
+                                log.error("Официант с ID {} не найден", id); // Логируем ошибку
+                                return new NotFoundException("Официант не найден");
+                            });
+                    log.debug("Найден официант: {}", waiter); // Логируем найденного официанта
+                    return waiter;
+                })
+                .collect(Collectors.toList());
+    }
     public Admin saveAdmin(AdminDTO adminDTO) {
+        log.info("saveAdmin");
         Admin admin = new Admin();
 
         admin.setName(adminDTO.getName());
 
         List<Waiter> waiters = adminDTO.getWaiterIds().stream()
                 .map(id -> waiterRepository.findById(id).orElseThrow(()->new NotFoundException(""))).collect(Collectors.toList());
+
 
         List<Chef> chefs = adminDTO.getChefIds().stream()
                 .map(id -> chefRepository.findById(id).orElseThrow(() -> new NotFoundException("Chef not found with id: " + id)))
@@ -60,6 +79,7 @@ import java.util.stream.Collectors;
        return adminRepository.save(admin);
     }
     public Admin saveWaiterToAdmin(Long adminId, List<Long> waiterIds){
+        log.info("saveWaiterToAdmin");
         Admin admin = adminRepository.findById(adminId).orElseThrow(()->new NotFoundException("Admin not found with id: " + adminId));
         List<Waiter> waiters =waiterIds.stream()
                 .map(id -> waiterRepository.findById(id).orElseThrow(()->new NotFoundException(""))).collect(Collectors.toList());
@@ -68,6 +88,7 @@ return adminRepository.save(admin);
 
     }
     public Admin saveChefToAdmin(Long adminId, List<Long> chefIds){
+        log.info("saveChefToAdmin");
         Admin admin =adminRepository.findById(adminId).orElseThrow(()->new NotFoundException("Admin not found with id: " + adminId));
         List<Chef> chefs = chefIds.stream()
                 .map(id -> chefRepository.findById(id).orElseThrow(() -> new NotFoundException(""))).collect(Collectors.toList());
@@ -75,6 +96,7 @@ return adminRepository.save(admin);
         return adminRepository.save(admin);
     }
     public AdminDTO findById(long id) throws NotFoundException {
+        log.info("findById");
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
         if (optionalAdmin.isEmpty()) {
             throw new NotFoundException("Admin with id " + id + " not found.");

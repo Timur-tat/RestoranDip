@@ -9,13 +9,14 @@ import com.diplom.restoran.exeption.NotFoundException;
 import com.diplom.restoran.repository.ChefRepository;
 import com.diplom.restoran.repository.CustomerOrderRepository;
 import com.diplom.restoran.repository.CustomerRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+@Slf4j
 @Service
 public class ChefService {
     private final ChefRepository chefRepository;
@@ -29,9 +30,11 @@ public class ChefService {
         this.customerRepository = customerRepository;
     }
     public List<ChefDTO> getAllChefs(){
+        log.info("getAllChefs");
         return chefRepository.findAll().stream().map(chef -> new ChefDTO(chef.getId(),chef.getName(), null)).collect(Collectors.toList());
     }
     public Chef saveChef(ChefDTO chefDTO){
+        log.info("Saving chef");
         Chef chef = new Chef();
         chef.setName(chefDTO.getName());
      List<CustomerOrder> customerOrders = chefDTO.getOrderIds().stream()
@@ -58,15 +61,35 @@ public class ChefService {
 //
 //}
     public ChefDTO getChefById(Long id) throws NotFoundException{
+        log.info("getChefById chef");
         Optional<Chef> optionalChef = chefRepository.findById(id);
         if (optionalChef.isEmpty()){
+            log.error("Chef not found");
             throw new NotFoundException("Chef not found");
         }
         Chef chef = optionalChef.get();
         return new ChefDTO(chef.getId(), chef.getName(), chef.getOrders().stream().map(x->x.getId()).collect(Collectors.toList()));
 
     }
+//    public ChefDTO getChefById(Long id) throws NotFoundException {
+//        log.info("Запрос на получение шеф-повара по ID: {}", id);
+//
+//        Optional<Chef> optionalChef = chefRepository.findById(id);
+//
+//        if (optionalChef.isEmpty()) {
+//            log.error("Шеф-повар с ID {} не найден", id);
+//            throw new NotFoundException("Шеф-повар с ID " + id + " не найден");
+//        }
+//
+//        Chef chef = optionalChef.get();
+//        log.debug("Найден шеф-повар: {}", chef);
+//
+//
+//
+//        return chefDTO;
+//    }
 public Chef saveCustomerOrderToChef(Long customerorderId, Long chefId) {
+        log.info("saveCustomerOrderToChef");
     Chef chef = chefRepository.findById(chefId)
             .orElseThrow(() -> new NotFoundException("Chef not found with id: " + chefId));
 

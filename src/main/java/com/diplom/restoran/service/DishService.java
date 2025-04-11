@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -25,45 +26,51 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+@Slf4j
 @Service
-public class DishService {
+public class DishService extends CurrentUserSecurity {
     private static final Logger logger = LoggerFactory.getLogger(DishService.class);
-    private DishRepository dishRepository;
+    private final DishRepository dishRepository;
     private final CustomerRepository customerRepository;
 private final CustomerOrderRepository customerOrderRepository;
     public DishService(DishRepository dishRepository,
-                       CustomerRepository customerRepository, CustomerOrderRepository customerOrderRepository) {
+                       CustomerRepository customerRepository, CustomerOrderRepository customerOrderRepository ) {
         this.dishRepository = dishRepository;
         this.customerRepository = customerRepository;
         this.customerOrderRepository=customerOrderRepository;
-    }
-    public List<DishDTO> getAllDishes() {
-        return dishRepository.findAll().stream().map(dish -> new DishDTO(dish.getId(), dish.getName(), dish.getDescription(), dish.getPrice(), dish.getAvailable(),new ArrayList<Long>())).collect(Collectors.toList());
 
     }
-//    @Transactional(propagation = Propagation.REQUIRES_NEW)
-//    public Dish saveDish(DishDTO dishDTO) {
-//        Dish dish = new Dish();
-//        dish.setId(dishDTO.getId());
-//        dish.setName(dishDTO.getName());
-//        dish.setDescription(dishDTO.getDescription());
-//        dish.setPrice(dishDTO.getPrice());
-//        dish.setAvailable(dishDTO.getAvailable());
-//        if(!dishDTO.getCustomers().isEmpty()) {
-//            List<Customer> customers = dishDTO.getCustomers().stream().map(d -> customerRepository.findById(d).orElseThrow(() -> new NotFoundException("Dish not found"))).collect(Collectors.toList());
+    public List<DishDTO> getAllDishes() {
+        return dishRepository.findAll().stream()
+                .map(dish -> new DishDTO(dish.getId(), dish.getName(), dish.getDescription(), dish.getPrice(), dish.getAvailable(),new ArrayList<Long>())).collect(Collectors.toList());
+
+    } //рабочий метод
+
+
+
+//    public DishDTO getDishById(Long id) throws NotFoundException {
+//        Optional<Dish> optionalDish = dishRepository.findById(id);
+//        if (optionalDish.isEmpty()){
+//            throw new NotFoundException("Dish not found");
 //        }
-//        return dishRepository.save(dish);
-//    }
-    ////////////////////////////
-//
+//        Dish dish = optionalDish.get();
+//        return new DishDTO(dish.getId(), dish.getName(), dish.getDescription(), dish.getPrice(), dish.getAvailable(), new ArrayList<Long>());// не ставится .stream().map(x->x.getId()).collect(Collectors.toList()))
+//    } //рабочий
     public DishDTO getDishById(Long id) throws NotFoundException {
+        log.info("Запрос на получение блюда по ID: {}, {}", id, getCurrentUsername());
         Optional<Dish> optionalDish = dishRepository.findById(id);
-        if (optionalDish.isEmpty()){
-            throw new NotFoundException("Dish not found");
+
+        if (optionalDish.isEmpty()) {
+            log.error("Блюдо с ID {} не найдено, пользователя {}" , id, getCurrentUsername());
+            throw new NotFoundException("Dish not found with id: " + id);
         }
+
         Dish dish = optionalDish.get();
-        return new DishDTO(dish.getId(), dish.getName(), dish.getDescription(), dish.getPrice(), dish.getAvailable(), new ArrayList<Long>());// не ставится .stream().map(x->x.getId()).collect(Collectors.toList()))
+        log.debug("Найдено блюдо: {}", dish);
+
+
+        DishDTO dishDTO = new DishDTO(dish.getId(), dish.getName(), dish.getDescription(), dish.getPrice(), dish.getAvailable(), new ArrayList<>());
+        return dishDTO;
     }
     @Transactional
 public DishDTO saveDish(DishDTO dishDTO) {
@@ -83,8 +90,8 @@ public DishDTO saveDish(DishDTO dishDTO) {
                             .orElseThrow(() -> new NotFoundException("Customer not found with id: " + customerOrdersId)))
                     .collect(Collectors.toList());
         } catch (NotFoundException e) {
-            logger.error("Error finding customer", e);
-            throw new RuntimeException("Error finding customer", e);
+            logger.error("Error finding customer", e.getMessage());
+            throw new NotFoundException("Error finding customer ");
         }
     }
     dish.setCustomerOrders(customerOrders);
@@ -122,5 +129,5 @@ public DishDTO saveDish(DishDTO dishDTO) {
         // 2. Удаляем блюдо по ID
         dishRepository.deleteById(id);
     }
-    ///////////////////////////////
+
 }

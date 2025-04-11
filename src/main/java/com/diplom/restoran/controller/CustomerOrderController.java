@@ -4,9 +4,11 @@ import com.diplom.restoran.dto.CustomerOrderDTO;
 import com.diplom.restoran.entity.*;
 import com.diplom.restoran.exeption.NotFoundException;
 import com.diplom.restoran.repository.*;
+import com.diplom.restoran.service.CurrentUserSecurity;
 import com.diplom.restoran.service.CustomerOrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/api/customerOrders")
 @Tag(name = "CustomerOrders", description = "Управление заказами в ресторане")
 @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-public class CustomerOrderController {
+public class CustomerOrderController extends CurrentUserSecurity {
 @Autowired
 private CustomerOrderRepository customerOrderRepository;
 @Autowired
@@ -107,34 +109,40 @@ return customerOrderService.saveCustomerOrder1(customerOrderDTO);
     @GetMapping
     @Operation(summary = "Список всех CustomerOrder.", description = "getAllCustomerOrders")
     public List<CustomerOrder> getAllCustomerOrders() {
+        log.info("Запрос на получение всех заказов {}",  getCurrentUsername());
         return customerOrderService.getAllCustomerOrders();
     }
     @GetMapping("/addWaiterToCustomerOrder{customerOrderId}/addWaiter/{waiterId}")
     @Operation(summary = "Добавление Waiter в CustomerOrder.", description = "addWaiter")
     public  CustomerOrder addWaiter(@PathVariable Long customerOrderId, @PathVariable Long waiterId) {
+        log.info("Добавление Waiter в CustomerOrder. {},{},{}",customerOrderId, waiterId,  getCurrentUsername());
         CustomerOrder customerOrder= customerOrderService.addWaiterToCustomerOrder(customerOrderId, waiterId);
     return customerOrder;
     } @GetMapping("/addChefToCustomerOrder{customerOrderId}/addWaiter/{chefId}")
     @Operation(summary = "Добавление Chef в CustomerOrder.", description = "addChef")
     public  CustomerOrder addChef(@PathVariable Long customerOrderId, @PathVariable Long chefId ) {
+        log.info("Добавление Chef в CustomerOrder. {},{},{}",customerOrderId, chefId,  getCurrentUsername());
         CustomerOrder customerOrder= customerOrderService.addChefToCustomerOrder(customerOrderId, chefId);
     return customerOrder;
     }
 @GetMapping("/customerOrderWithNullChef")
 @Operation(summary = "Список CustomerOrder с Chef Null.", description = "customerOrderWithNullChef")
     public List<CustomerOrder> customerOrderWithNullChef() {
+    log.info("Запрос на получение всех блюд где  с Chef Null. {}",  getCurrentUsername());
         List<CustomerOrder> customerOrders = customerOrderService.customerOrderWithNullChef();
         return customerOrders;
 }
 @GetMapping("/customerOrderWithNullWaiter")
 @Operation(summary = "Список CustomerOrder с Waiter Null.", description = "customerOrderWithNullWaiter")
     public List<CustomerOrder> customerOrderWithNullWaiter(){
+    log.info("Запрос на получение всех блюд где  с Waiter Null. {}",  getCurrentUsername());
         List<CustomerOrder> customerOrders= customerOrderService.customerOrderWithNullWaiter();
         return customerOrders;
 }
 @GetMapping("/totalAmountCustomerOrder")
 @Operation(summary = "Подсчет общей суммы заказа по его id=", description = "setAllPriceTotalAmount")
     public Double setAllPriceTotalAmount(Long customerOrderId){
+    log.info("Запрос на подсчет общей суммы в заказе {},{}", customerOrderId,  getCurrentUsername());
        return customerOrderService.setAllPriceTotalAmount(customerOrderId);
 
 
@@ -142,6 +150,7 @@ return customerOrderService.saveCustomerOrder1(customerOrderDTO);
 @GetMapping("/paidIsTrueId/{customerOrderId}")
 @Operation(summary = "Подтверждение оплаты заказа по его id.", description = "paidIsTrueId")
     public CustomerOrder paidIsTrueId(Long customerOrderId){
+    log.info("Запрос подтверждение оплаты {},{}", customerOrderId, getCurrentUsername());
         return customerOrderService.paidIsTrue(customerOrderId);
 }
 //    @DeleteMapping("/{id}")

@@ -7,6 +7,8 @@ import com.diplom.restoran.repository.*;
 import com.diplom.restoran.security.models.User;
 import com.diplom.restoran.security.repository.UserRepository;
 import org.aspectj.weaver.ast.Not;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -26,6 +28,7 @@ import java.util.stream.StreamSupport;
 
 @Service
 public class CustomerOrderService {
+    private static final Logger log = LoggerFactory.getLogger(CustomerOrderService.class);
     private UserRepository userRepository;
     private final CustomerOrderRepository customerOrderRepository;
     private final CustomerRepository customerRepository;
@@ -49,8 +52,11 @@ return customerOrderRepository.findAll();
     }
 
     public CustomerOrderDTO getCustomerOrderByIdDTO(Long id) throws NotFoundException {
+
         Optional<CustomerOrder> optionalCustomerOrder = customerOrderRepository.findById(id);
+        log.info("Customer order found: " + optionalCustomerOrder);
         if (optionalCustomerOrder.isEmpty()){
+            log.error("CustomerOrder not found");
             throw new NotFoundException("Customer order not found");
         }
         CustomerOrder customerOrder = optionalCustomerOrder.get();
@@ -60,31 +66,38 @@ return customerOrderRepository.findAll();
 
     public CustomerOrder getCustomerOrderById(Long id) throws NotFoundException {
         Optional<CustomerOrder> optionalCustomerOrder = customerOrderRepository.findById(id);
+        log.info("Customer order found: " + optionalCustomerOrder);
         if (optionalCustomerOrder.isEmpty()){
+            log.error("CustomerOrder not found");
             throw new NotFoundException("Customer order not found");
         }
         CustomerOrder customerOrder = optionalCustomerOrder.get();
         return customerOrder;
     }
     public List<CustomerOrder> getOrdersWithNullWaiter() {
+        log.info("getOrdersWithNullWaiter");
         return customerOrderRepository.findByWaiterIsNull();
     }
 
     public List<CustomerOrder> getOrdersWithNullChef() {
+        log.info("getOrdersWithNullChef");
         return customerOrderRepository.findByChefIsNull();
     }
 
     public List<CustomerOrder> getOrdersWithNullWaiterAndChef() {
+        log.info("getOrdersWithNullWaiterAndChef");
         return customerOrderRepository.findByWaiterIsNullAndChefIsNull();
     }
 
     public List<Dish> getDishesByCustomerOrderId(Long customerOrderId) throws NotFoundException {
+        log.info("getDishesByCustomerOrderId");
         CustomerOrder customerOrder = customerOrderRepository.findById(customerOrderId)
                 .orElseThrow(() -> new NotFoundException("Customer order not found with id: " + customerOrderId));
 
         return customerOrder.getDishes(); // Возвращаем список Dishes из CustomerOrder
     }
 public CustomerOrder addChefToCustomerOrder(Long customerOrderId, Long chefId) throws NotFoundException {
+        log.info("addChefToCustomerOrder");
         CustomerOrder   customerOrder = customerOrderRepository.findById(customerOrderId)
                 .orElseThrow(() -> new NotFoundException("Customer order not found with id: " + customerOrderId));
         Chef chef=chefRepository.findById(chefId)
@@ -93,6 +106,7 @@ public CustomerOrder addChefToCustomerOrder(Long customerOrderId, Long chefId) t
       return   customerOrderRepository.save(customerOrder);
 }
     public CustomerOrder addWaiterToCustomerOrder(Long customerOrderId, Long waiterId) throws NotFoundException {
+        log.info("addWaiterToCustomerOrder");
         CustomerOrder customerOrder = customerOrderRepository.findById(customerOrderId)
                 .orElseThrow(() -> new NotFoundException("Customer order not found with id: " + customerOrderId));
 
@@ -103,13 +117,16 @@ public CustomerOrder addChefToCustomerOrder(Long customerOrderId, Long chefId) t
         return customerOrderRepository.save(customerOrder);
     }
 public List <CustomerOrder> customerOrderWithNullWaiter(){
+        log.info("customerOrderWithNullWaiter");
         return customerOrderRepository.findByWaiterIsNull();
 }
 
 public List <CustomerOrder> customerOrderWithNullChef(){
+        log.info("customerOrderWithNullChef");
         return customerOrderRepository.findByChefIsNull();
 }
 public Double setAllPriceTotalAmount(Long customerOrderId) throws NotFoundException {
+        log.info("setAllPriceTotalAmount");
         Optional<CustomerOrder> optionalCustomerOrder = customerOrderRepository.findById(customerOrderId);
         CustomerOrder customerOrder;
         if (optionalCustomerOrder.isEmpty()){
@@ -127,6 +144,7 @@ public Double setAllPriceTotalAmount(Long customerOrderId) throws NotFoundExcept
     }
     @Transactional(propagation = Propagation.REQUIRES_NEW)
 public CustomerOrder saveCustomerOrder(CustomerOrderDTO customerOrderDTO) throws NotFoundException {
+        log.info("saveCustomerOrder");
     Customer customer = customerRepository.findById(customerOrderDTO.getCustomerId())
             .orElseThrow(() -> new NotFoundException("Customer not found"));
     List<Dish> dishes = customerOrderDTO.getDishIds().stream()
@@ -140,6 +158,7 @@ public CustomerOrder saveCustomerOrder(CustomerOrderDTO customerOrderDTO) throws
 }
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public CustomerOrder saveCustomerOrder1(CustomerOrderDTO customerOrderDTO) throws NotFoundException {
+        log.info("saveCustomerOrder1");
         Customer customer = getCurrentCustomer();
         List<Dish> dishes = customerOrderDTO.getDishIds().stream()
                 .map(dish -> dishRepository.findById(dish)
@@ -150,6 +169,7 @@ public CustomerOrder saveCustomerOrder(CustomerOrderDTO customerOrderDTO) throws
         return savedOrder;
     }
     public void addDishToOrder(Long orderId, Long dishId) {
+        log.info("addDishToOrder");
         CustomerOrder order = customerOrderRepository.findById(orderId)
                 .orElseThrow(() -> new NotFoundException("Order not found"));
 
@@ -165,6 +185,7 @@ public CustomerOrder saveCustomerOrder(CustomerOrderDTO customerOrderDTO) throws
         customerOrderRepository.save(order);
     }
     public CustomerOrder saveCustomerOrder(CustomerOrder customerOrder) throws NotFoundException {
+        log.info("saveCustomerOrder");
         Optional<CustomerOrder> optionalCustomerOrder = customerOrderRepository.findById(customerOrder.getId());
         if (optionalCustomerOrder.isEmpty()){
             throw new NotFoundException("Customer order not found with id: " + customerOrder.getId());
@@ -174,6 +195,7 @@ public CustomerOrder saveCustomerOrder(CustomerOrderDTO customerOrderDTO) throws
         return customerOrderRepository.save(customerOrder);
     }
     public CustomerOrder paidIsTrue( Long customerOrderId) throws NotFoundException {
+        log.info("paidIsTrue");
         CustomerOrder customerOrder = customerOrderRepository.findById(customerOrderId)
                 .orElseThrow(() -> new NotFoundException("Заказ с таким полем Id отсутствует" + customerOrderId));
 
@@ -181,6 +203,7 @@ public CustomerOrder saveCustomerOrder(CustomerOrderDTO customerOrderDTO) throws
         return customerOrderRepository.save(customerOrder);
     }
     public void deleteCustomerOrder(Long id) {
+        log.info("deleteCustomerOrder");
         if (!customerOrderRepository.existsById(id)) {
             throw new NotFoundException("CustomerOrder not found with id: " + id);
         }
@@ -188,6 +211,7 @@ public CustomerOrder saveCustomerOrder(CustomerOrderDTO customerOrderDTO) throws
     }
 
     public Customer getCurrentCustomer() {
+        log.info("getCurrentCustomer");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
